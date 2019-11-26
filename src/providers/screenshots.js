@@ -1,7 +1,4 @@
 const puppeteer = require('puppeteer');
-const slugify = require('slugify');
-const path = require('path');
-const fs = require('fs-extra');
 
 module.exports = function (browser, devices) {
     devices = devices !== undefined ? devices : [
@@ -39,23 +36,19 @@ module.exports = function (browser, devices) {
 
             return Promise.all(
                 devices.map(device => {
-                    const filepath = path.resolve(BASE_PATH, 'screenshots', (new URL(url)).hostname, slugify(device.name) + '.jpg');
-                    fs.ensureDirSync(path.dirname(filepath));
-
                     return browser.newPage()
                         .then(page => {
                             return page.emulate(device)
                                 .then(() => {
                                     return page.goto(url, {waitUntil: 'networkidle0'})
                                         .then(() => {
-                                            DATA[url]['screenshots'][device.name] = filepath;
-
                                             return page.screenshot({
                                                 type: 'jpeg',
-                                                path: filepath,
+                                                encoding: 'base64',
                                                 fullPage: false,
                                             })
-                                                .then(() => {
+                                                .then(screenshot => {
+                                                    DATA[url]['screenshots'][device.name] = 'data:image/jpeg;base64,'+screenshot;
                                                     return page.close();
                                                 });
                                         });

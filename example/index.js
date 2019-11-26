@@ -4,7 +4,7 @@ process.chdir(__dirname);
 
 watchtower([
     'https://github.com',
-], './report')
+], './report.json')
     .finally(() => {
        process.exit(0);
     });

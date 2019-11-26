@@ -1,14 +1,13 @@
 const chromeLauncher = require('chrome-launcher');
 const path = require('path');
-const fs = require('fs-extra');
+const fs = require('fs');
 
 /**
  * @param {string[]} urls
- * @param {string} basePath
+ * @param {string} [reportFilePath]
  * @returns {Promise}
  */
-module.exports = function (urls, basePath) {
-    global.BASE_PATH = path.resolve(process.cwd(), basePath);
+module.exports = function (urls, reportFilePath) {
     global.URLS = urls.map(url => (new URL(url)).toString());
     global.DATA = {};
     URLS.forEach(url => DATA[url] = {});
@@ -44,12 +43,15 @@ module.exports = function (urls, basePath) {
                     require('./providers/lighthouse')(),
                 ]);
             })
+            .then(() => {
+                if (reportFilePath !== undefined) {
+                    reportFilePath = path.resolve(process.cwd(), reportFilePath);
+                    fs.mkdirSync(path.dirname(reportFilePath), {recursive: true});
+                    fs.writeFileSync(reportFilePath, JSON.stringify(DATA, null, 4));
+                }
+            })
             .catch(reject)
             .finally(() => {
-                const filepath = path.resolve(BASE_PATH, 'data.json');
-                fs.ensureFileSync(filepath);
-                fs.writeJsonSync(filepath, DATA, {spaces: 4});
-
                 return CHROME.instance.kill().then(() => {
                     resolve(DATA);
                 }).catch(reject);
