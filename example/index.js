@@ -4,7 +4,7 @@ process.chdir(__dirname);
 
 watchtower(
     [
-    'https://github.com',
+        'https://github.com',
     ],
     './report.json' // if you don't need a file just omit this argument
 )
