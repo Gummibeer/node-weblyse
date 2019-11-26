@@ -63,7 +63,7 @@ module.exports = function (browser, devices) {
                         });
                 })
             ).finally(() => {
-                console.log('screenshot: ' + url);
+                console.log('screenshots: ' + url);
             });
         })
     );
