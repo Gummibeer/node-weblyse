@@ -1,8 +1,8 @@
-const watchtower = require('../src/index');
+const weblyse = require('../src/index');
 
 process.chdir(__dirname);
 
-watchtower({
+weblyse({
     urls: [
         'https://github.com',
     ],

@@ -13,6 +13,6 @@ module.exports = function (config) {
         {
             maxAge: 24,
         },
-        config
+        config,
     );
 };

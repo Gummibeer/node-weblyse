@@ -1,4 +1,4 @@
-const {Analyzer} = require('hint');
+const { Analyzer } = require('hint');
 
 module.exports = function (config) {
     const webhint = Analyzer.create(config);
@@ -7,7 +7,7 @@ module.exports = function (config) {
         webhint.analyze(URLS)
             .then(results => {
                 results.forEach(result => {
-                    DATA[result.url]['webhint'] = result;
+                    DATA[result.url].webhint = result;
                     console.log('webhint: ' + result.url);
                 });
 

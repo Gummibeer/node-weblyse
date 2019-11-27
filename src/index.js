@@ -3,7 +3,7 @@ const path = require('path');
 const fs = require('fs');
 
 /**
- * @typedef {Object} WatchtowerConfig
+ * @typedef {Object} WeblyseConfig
  * @property {string[]} urls
  * @property {string} [reportFilePath]
  * @property {ProvidersConfig} [providers]
@@ -19,13 +19,15 @@ const fs = require('fs');
  */
 
 /**
- * @param {WatchtowerConfig} config
+ * @param {WeblyseConfig} config
  * @returns {Promise}
  */
 module.exports = function (config) {
     global.URLS = config.urls.map(url => (new URL(url)).toString());
     global.DATA = {};
-    URLS.forEach(url => DATA[url] = {});
+    URLS.forEach(url => {
+        DATA[url] = {};
+    });
 
     global.CHROME = {
         opts: {
@@ -98,7 +100,7 @@ module.exports = function (config) {
             .then(() => {
                 if (config.reportFilePath) {
                     const reportFilePath = path.resolve(process.cwd(), config.reportFilePath);
-                    fs.mkdirSync(path.dirname(reportFilePath), {recursive: true});
+                    fs.mkdirSync(path.dirname(reportFilePath), { recursive: true });
                     fs.writeFileSync(reportFilePath, JSON.stringify(DATA, null, 4));
                 }
             })

@@ -15,6 +15,6 @@ module.exports = function (config) {
             followRedirects: true,
             hide: false,
         },
-        config
+        config,
     );
 };

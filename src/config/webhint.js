@@ -18,9 +18,9 @@ module.exports = function (config) {
                     headless: true,
                     waitUntil: 'networkidle0',
                     puppeteerOptions: CHROME.opts,
-                }
+                },
             },
         },
-        config
+        config,
     );
 };
