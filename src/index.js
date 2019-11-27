@@ -14,8 +14,9 @@ const fs = require('fs');
  * @property {boolean|SsllabsConfig} [ssllabs=true]
  * @property {boolean|SecurityheadersConfig} [securityheaders=true]
  * @property {boolean|WebhintConfig} [webhint=true]
+ * @property {boolean|ScreenshotsConfig} [screenshots=true]
  * @property {boolean} [lighthouse=true]
- * @property {boolean} [screenshots=true]
+ * @property {boolean} [axe=true]
  */
 
 /**
@@ -85,12 +86,24 @@ module.exports = function (config) {
                 if (config.providers.screenshots === undefined) {
                     config.providers.screenshots = true;
                 }
-                if (config.providers.screenshots) {
+                if (config.providers.axe === undefined) {
+                    config.providers.axe = true;
+                }
+
+                if (config.providers.screenshots || config.providers.axe) {
                     providers.push(
                         require('./libs/browser')(function (browser) {
-                            return [
-                                require('./providers/screenshots')(browser),
-                            ];
+                            const browserProviders = [];
+
+                            if (config.providers.screenshots) {
+                                browserProviders.push(require('./providers/screenshots')(browser, require('./config/screenshots')(config.providers.screenshots)));
+                            }
+
+                            if (config.providers.axe) {
+                                browserProviders.push(require('./providers/axe')(browser));
+                            }
+
+                            return browserProviders;
                         }),
                     );
                 }
