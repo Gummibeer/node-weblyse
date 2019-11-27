@@ -1,6 +1,6 @@
 const securityheaders = require('node-securityheaders.io');
 
-module.exports = function (followRedirects, hide) {
+module.exports = function ({followRedirects, hide}) {
     return Promise.all(
         URLS.map(url => {
             return securityheaders(url, followRedirects, hide)

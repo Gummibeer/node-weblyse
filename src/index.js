@@ -3,12 +3,27 @@ const path = require('path');
 const fs = require('fs');
 
 /**
- * @param {string[]} urls
- * @param {string} [reportFilePath]
+ * @typedef {Object} WatchtowerConfig
+ * @property {string[]} urls
+ * @property {string} [reportFilePath]
+ * @property {ProvidersConfig} [providers]
+ */
+
+/**
+ * @typedef {Object} ProvidersConfig
+ * @property {boolean|SsllabsConfig} [ssllabs=true]
+ * @property {boolean|SecurityheadersConfig} [securityheaders=true]
+ * @property {boolean|WebhintConfig} [webhint=true]
+ * @property {boolean} [lighthouse=true]
+ * @property {boolean} [screenshots=true]
+ */
+
+/**
+ * @param {WatchtowerConfig} config
  * @returns {Promise}
  */
-module.exports = function (urls, reportFilePath) {
-    global.URLS = urls.map(url => (new URL(url)).toString());
+module.exports = function (config) {
+    global.URLS = config.urls.map(url => (new URL(url)).toString());
     global.DATA = {};
     URLS.forEach(url => DATA[url] = {});
 
@@ -31,21 +46,58 @@ module.exports = function (urls, reportFilePath) {
                 CHROME.opts.port = chrome.port;
                 CHROME.instance = chrome;
 
-                return Promise.all([
-                    require('./providers/ssllabs')(),
-                    require('./providers/securityheaders')(true, true),
-                    require('./libs/browser')(function (browser) {
-                        return [
-                            require('./providers/screenshots')(browser),
-                        ];
-                    }),
-                    require('./providers/webhint')(),
-                    require('./providers/lighthouse')(),
-                ]);
+                const providers = [];
+
+                if (config.providers === undefined) {
+                    config.providers = {};
+                }
+
+                if (config.providers.ssllabs === undefined) {
+                    config.providers.ssllabs = true;
+                }
+                if (config.providers.ssllabs) {
+                    providers.push(require('./providers/ssllabs')(require('./config/ssllabs')(config.providers.ssllabs)));
+                }
+
+                if (config.providers.securityheaders === undefined) {
+                    config.providers.securityheaders = true;
+                }
+                if (config.providers.securityheaders) {
+                    providers.push(require('./providers/securityheaders')(require('./config/securityheaders')(config.providers.securityheaders)));
+                }
+
+                if (config.providers.webhint === undefined) {
+                    config.providers.webhint = true;
+                }
+                if (config.providers.webhint) {
+                    providers.push(require('./providers/webhint')(require('./config/webhint')(config.providers.webhint)));
+                }
+
+                if (config.providers.lighthouse === undefined) {
+                    config.providers.lighthouse = true;
+                }
+                if (config.providers.lighthouse) {
+                    providers.push(require('./providers/lighthouse')());
+                }
+
+                if (config.providers.screenshots === undefined) {
+                    config.providers.screenshots = true;
+                }
+                if (config.providers.screenshots) {
+                    providers.push(
+                        require('./libs/browser')(function (browser) {
+                            return [
+                                require('./providers/screenshots')(browser),
+                            ];
+                        }),
+                    );
+                }
+
+                return Promise.all(providers);
             })
             .then(() => {
-                if (reportFilePath !== undefined) {
-                    reportFilePath = path.resolve(process.cwd(), reportFilePath);
+                if (config.reportFilePath) {
+                    const reportFilePath = path.resolve(process.cwd(), config.reportFilePath);
                     fs.mkdirSync(path.dirname(reportFilePath), {recursive: true});
                     fs.writeFileSync(reportFilePath, JSON.stringify(DATA, null, 4));
                 }

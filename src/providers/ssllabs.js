@@ -1,6 +1,6 @@
 const axios = require('axios');
 
-module.exports = function (maxAge) {
+module.exports = function ({maxAge}) {
     maxAge = maxAge !== undefined ? maxAge : 24;
 
     return Promise.all(

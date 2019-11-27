@@ -2,12 +2,12 @@ const watchtower = require('../src/index');
 
 process.chdir(__dirname);
 
-watchtower(
-    [
+watchtower({
+    urls: [
         'https://github.com',
     ],
-    './report.json' // if you don't need a file just omit this argument
-)
+    reportFilePath: './report.json', // if you don't need a file just omit this key
+})
     .then(data => {
         // do whatever you want with the data Object
         // * assertions in your CI
