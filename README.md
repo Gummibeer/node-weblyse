@@ -27,7 +27,19 @@ weblyse({
         // the report will contain all of them
         'https://github.com',
     ],
-    reportFilePath: './report.json', // if you don't need a file just omit this key
+    // if you don't need a file just omit the reportFilePath key
+    reportFilePath: './report.json', 
+    // you con configure the single providers
+    // enable/disable them via a simple boolean
+    // or use an object for configuration values
+    providers: {
+        ssllabs: true,
+        securityheaders: true,
+        webhint: true,
+        screenshots: true,
+        lighthouse: true,
+        axe: true,
+    },
 })
     .then(data => {
         // do whatever you want with the data Object
