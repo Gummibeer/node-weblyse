@@ -1,0 +1,16 @@
+name: Linting
+on:
+    push:
+jobs:
+    linting:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Get branch name
+              id: branch-name
+              uses: tj-actions/branch-names@v7.0.7
+            - name: Checkout code
+              uses: actions/checkout@v3
+            - name: Install dependencies
+              run: npm i
+            - name: Run ESLint
+              run: ./node_modules/eslint/bin/eslint.js . --ext .js,.jsx,.ts,.tsx
