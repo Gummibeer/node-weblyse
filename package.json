@@ -29,7 +29,8 @@
     "url": "git+https://github.com/Gummibeer/node-weblyse.git"
   },
   "scripts": {
-    "lint": "./node_modules/.bin/eslint src"
+    "lint": "./node_modules/.bin/eslint src",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@axe-core/puppeteer": "^4.8.2",
@@ -47,6 +48,7 @@
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^10.0.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1"
+    "eslint-plugin-standard": "^4.0.1",
+    "husky": "^8.0.3"
   }
 }
