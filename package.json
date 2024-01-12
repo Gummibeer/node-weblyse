@@ -35,6 +35,7 @@
     "@axe-core/puppeteer": "^4.8.2",
     "axios": "^1.6.5",
     "chrome-launcher": "^1.1.0",
+    "fix-esm": "^1.0.1",
     "hint": "^7.1.10",
     "lighthouse": "^11.4.0",
     "puppeteer": "^21.7.0",

@@ -1,4 +1,4 @@
-const chromeLauncher = require('chrome-launcher');
+const chromeLauncher = require('fix-esm').require('chrome-launcher');
 const path = require('path');
 const fs = require('fs');
 
@@ -79,6 +79,7 @@ module.exports = function (config) {
                 if (config.providers.lighthouse === undefined) {
                     config.providers.lighthouse = true;
                 }
+
                 if (config.providers.lighthouse) {
                     providers.push(require('./providers/lighthouse')());
                 }
@@ -119,9 +120,8 @@ module.exports = function (config) {
             })
             .catch(reject)
             .finally(() => {
-                return CHROME.instance.kill().then(() => {
-                    resolve(DATA);
-                }).catch(reject);
+                CHROME.instance.kill();
+                return resolve(DATA);
             });
     });
 };
