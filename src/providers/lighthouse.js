@@ -12,7 +12,7 @@ module.exports = async function () {
                         '--output=json',
                         '--chromeFlags=--headless',
                         '--disable-full-page-screenshot',
-                        '--only-categories=performance,accessibility,best-practices,seo'
+                        '--only-categories=performance,accessibility,best-practices,seo',
                     ]);
 
                 if (status !== 0) {
