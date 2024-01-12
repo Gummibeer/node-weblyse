@@ -17,5 +17,5 @@ weblyse({
     })
     .finally(() => {
         // that's needed to end your node process
-       process.exit(0);
+        process.exit(0);
     });
