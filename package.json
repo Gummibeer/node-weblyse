@@ -32,7 +32,7 @@
     "lint": "./node_modules/.bin/eslint src"
   },
   "dependencies": {
-    "axe-puppeteer": "^1.0.0",
+    "@axe-core/puppeteer": "^4.8.2",
     "axios": "^1.6.5",
     "chrome-launcher": "^1.1.0",
     "hint": "^7.1.10",

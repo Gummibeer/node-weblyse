@@ -1,4 +1,4 @@
-const { AxePuppeteer } = require('axe-puppeteer');
+const AxePuppeteer = require('@axe-core/puppeteer');
 
 module.exports = function (browser) {
     return Promise.all(
