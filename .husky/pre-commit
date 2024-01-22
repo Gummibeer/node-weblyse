@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+printf "\nChecking if code compiles. Please wait...\n"
+npm run build
+
+printf "\nLinting. Please wait...\n"
+./node_modules/eslint/bin/eslint.js . --fix

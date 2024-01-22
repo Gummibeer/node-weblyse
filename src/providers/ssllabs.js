@@ -9,7 +9,12 @@ module.exports = function ({ maxAge }) {
                 let interval;
 
                 const check = async function () {
-                    const { data } = await axios('https://api.ssllabs.com/api/v2/analyze?fromCache=on&all=done&maxAge=' + maxAge + '&publish=off&host=' + url).catch(error => error.response);
+                    const response = await axios('https://api.ssllabs.com/api/v2/analyze?fromCache=on&all=done&maxAge=' + maxAge + '&publish=off&host=' + url).catch(error => error.response);
+                    if (!response) {
+                        return false;
+                    }
+
+                    const data = response.data;
 
                     if (
                         typeof data === 'object' &&
